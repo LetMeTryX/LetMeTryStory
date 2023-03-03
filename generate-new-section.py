@@ -1,5 +1,6 @@
 import openai
 import os
+import datetime
 
 def process_files():
     # Get OpenAI API key from environment variable
@@ -43,9 +44,12 @@ def process_files():
     
     print("New section words:", len(new_section))
     print(new_section)
-    
+
+    # Generate filename with current timestamp
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
     # Save new section to file
-    with open("new-section.txt", "w") as f:
+    with open("new-section-"+timestamp+".txt", "w") as f:
         f.write(new_section)
     
     # Append new section to story summary
