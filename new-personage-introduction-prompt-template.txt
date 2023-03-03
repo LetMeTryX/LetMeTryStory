@@ -1,0 +1,5 @@
+请根据下文总结一下第二宇宙各个人物的特点。
+
+故事背景：[STORY_BACKGROUND]
+人物介绍：[PERSONAGE_INTRODUCTION]
+前情概要：[STORY_SUMMARY]

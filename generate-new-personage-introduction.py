@@ -9,7 +9,7 @@ def process_files():
         return
     
     # Read files
-    with open("new-section-prompt-template.txt", "r") as f:
+    with open("new-personage-introduction-prompt-template.txt", "r") as f:
         prompt_template = f.read()
     with open("old-story-background.txt", "r") as f:
         story_background = f.read()
@@ -28,6 +28,8 @@ def process_files():
     
     print("Filled prompt:")
     print(prompt)
+    with open("new-personage-introduction-prompt.txt", "w") as f:
+        f.write(prompt)
     
     # Call OpenAI API
     response = openai.Completion.create(
@@ -41,21 +43,12 @@ def process_files():
     
     new_section = response.choices[0].text.strip()
     
-    print("New section words:", len(new_section))
+    print("New personage-introduction:")
     print(new_section)
     
     # Save new section to file
-    with open("new-section.txt", "w") as f:
+    with open("new-personage-introduction.txt", "w") as f:
         f.write(new_section)
     
-    # Append new section to story summary
-    new_story_summary = story_summary + "\n\n" + new_section
     
-    print("New story summary:")
-    print(new_story_summary)
-    
-    # Save new story summary to file
-    with open("new-story-summary.txt", "w") as f:
-        f.write(new_story_summary)
-        
 process_files()

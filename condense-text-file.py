@@ -32,14 +32,14 @@ def condense_text(file_path):
     print("Original tokens:", original_len)
     print("Target tokens:", target_len)
     
-    prompt = f"Condense the following text:\n\n{text}"
+    prompt = f"Summary the following text with 400 to 600 charactors:\n\n{text}"
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=prompt,
         max_tokens=target_len,
         n=1,
         stop=None,
-        temperature=0.5,
+        temperature=0.2,
     )
 
     condensed_text = response.choices[0].text.strip()
