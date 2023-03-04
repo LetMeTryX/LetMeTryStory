@@ -4,6 +4,11 @@ import sys
 import tokenizers
 import tiktoken
 import time
+import logging
+from conversational_chatbot import ask_chatbot 
+
+# Set the logging level to DEBUG
+logging.basicConfig(level=logging.DEBUG)
 
 def num_tokens_from_string(string: str, encoding_name: str) -> int:
     """Returns the number of tokens in a text string."""
@@ -38,7 +43,7 @@ def condense_text(text, range_from, range_to):
     print("Original tokens:", original_len)
     print("Target tokens:", target_len)
     
-    prompt = f"Can you please summarize the following text into a response that is between [{range_from}] and [{range_to}] words?\n{text}"
+    prompt = f"请用500字重写下文:\n{text}"
     print(prompt)
     
     text_size = len(text)
@@ -47,16 +52,19 @@ def condense_text(text, range_from, range_to):
     while text_size < range_from or text_size > range_to+ai_inaccuracy:
         call_count+=1
         print(f"Calling openai #{call_count} for size in [{range_from},{range_to}]...")
+        '''
         response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=prompt,
             max_tokens=target_len,
-            n=1,
+            n=2,
             stop=None,
-            temperature=0.3,
+            temperature=0.8,
         )
 
         condensed_text = response.choices[0].text.strip()
+        '''
+        condensed_text=ask_chatbot(prompt)
         condensed_len = num_tokens_from_string(condensed_text, 'gpt2')
         length_diff = original_len - condensed_len
 

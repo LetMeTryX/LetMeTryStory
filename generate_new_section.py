@@ -3,6 +3,7 @@ import os
 import datetime
 from condense_text_file import condense_text, num_tokens_from_string
 import time
+from conversational_chatbot import ask_chatbot 
 
 def process_files():
     # Get OpenAI API key from environment variable
@@ -10,6 +11,10 @@ def process_files():
     if not openai.api_key:
         print("Error: OPENAI_API_KEY environment variable not found.")
         return
+    
+    if not os.path.exists('tmp'):
+        os.makedirs('tmp')
+
     
     with open("old-story-background.txt", "r") as f:
         story_background = f.read()
@@ -70,6 +75,7 @@ def call_openai_with_size_expectation(prompt, range_from, range_to):
         call_count+=1
         print(f"Calling openai #{call_count} with tokens {prompt_tokens}+{target_tokens} for size in [{range_from},{range_to}]...")
    
+        '''
         # Call OpenAI API
         response = openai.Completion.create(
             engine="text-davinci-003",
@@ -81,6 +87,8 @@ def call_openai_with_size_expectation(prompt, range_from, range_to):
         )
 
         target_value = response.choices[0].text.strip()
+        '''
+        target_value=ask_chatbot(prompt)
         text_size=len(target_value)
         print(f"Got {text_size} from openai: \n {target_value}")
         time.sleep(10)
