@@ -43,7 +43,7 @@ def condense_text(text, range_from, range_to):
     print("Original tokens:", original_len)
     print("Target tokens:", target_len)
     
-    prompt = f"请用500字重写下文:\n{text}"
+    prompt = f"请用{(range_to+range_from)/2}字重写下文:\n{text}"
     print(prompt)
     
     text_size = len(text)

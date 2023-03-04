@@ -90,6 +90,9 @@ def call_openai_with_size_expectation(prompt, range_from, range_to):
         '''
         target_value=ask_chatbot(prompt)
         text_size=len(target_value)
+        if(text_size is 0):
+            print("got 0 from openai, sth wrong, sleep 60s...")
+            time.sleep(60)
         print(f"Got {text_size} from openai: \n {target_value}")
         time.sleep(10)
     return target_value
