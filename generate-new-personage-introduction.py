@@ -1,5 +1,7 @@
 import openai
 import os
+from condense_text_file import condense_text
+from generate_new_section import call_openai_with_template, save_to_file
 
 def process_files():
     # Get OpenAI API key from environment variable
@@ -9,46 +11,18 @@ def process_files():
         return
     
     # Read files
-    with open("new-personage-introduction-prompt-template.txt", "r") as f:
-        prompt_template = f.read()
     with open("old-story-background.txt", "r") as f:
         story_background = f.read()
     with open("old-personage-introduction.txt", "r") as f:
         personage_introduction = f.read()
     with open("old-story-summary.txt", "r") as f:
         story_summary = f.read()
-    with open("new-section-input.txt", "r") as f:
-        new_section_input = f.read()
     
-    # Fill prompt template
-    prompt = prompt_template.replace("STORY_BACKGROUND", story_background)
-    prompt = prompt.replace("PERSONAGE_INTRODUCTION", personage_introduction)
-    prompt = prompt.replace("STORY_SUMMARY", story_summary)
-    prompt = prompt.replace("NEW_SECTION_INPUT", new_section_input)
     
-    print("Filled prompt:")
-    print(prompt)
-    with open("new-personage-introduction-prompt.txt", "w") as f:
-        f.write(prompt)
-    
-    # Call OpenAI API
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=2048,
-        n=1,
-        stop=None,
-        temperature=0.7,
-    )
-    
-    new_section = response.choices[0].text.strip()
-    
-    print("New personage-introduction:")
-    print(new_section)
-    
-    # Save new section to file
-    with open("new-personage-introduction.txt", "w") as f:
-        f.write(new_section)
-    
+    new_section_input = ""
+        
+    new_personage_introduction = call_openai_with_template("new-personage-introduction", "new-personage-introduction-prompt-template.txt", story_background, personage_introduction, story_summary, new_section_input)
+    new_personage_introduction = condense_text(new_personage_introduction, 150, 300)
+    save_to_file("old-personage-introduction.txt", new_personage_introduction)
     
 process_files()

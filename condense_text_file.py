@@ -3,6 +3,7 @@ import os
 import sys
 import tokenizers
 import tiktoken
+import time
 
 def num_tokens_from_string(string: str, encoding_name: str) -> int:
     """Returns the number of tokens in a text string."""
@@ -19,12 +20,14 @@ def condense_file(file_path):
     condense_text(text, 400, 600)    
         
 
-def condense_text(text, range_from, range_to):        
+def condense_text(text, range_from, range_to):
+    ai_inaccuracy=50 # AI may not return extract the requested number or words.
+    
     print("Original text:")
     print(text)
     original_len = num_tokens_from_string(text, 'gpt2')
     
-    max = 4096 - 200; # new engine may calculate tokens differently, reserved some buff. may revise in future. 
+    max = 4096 - 200; # new engine may calculate tokens differently, reserved some buff 200. may revise in future. 
     
     if original_len < max/2:
         target_len = int(original_len * 0.9)
@@ -35,19 +38,22 @@ def condense_text(text, range_from, range_to):
     print("Original tokens:", original_len)
     print("Target tokens:", target_len)
     
-    prompt = f"Summary the following text with {range_from} to {range_to} charactors:\n\n{text}"
+    prompt = f"Can you please summarize the following text into a response that is between [{range_from}] and [{range_to}] words?\n{text}"
+    print(prompt)
     
-    text_size = original_len
+    text_size = len(text)
     condensed_text = text
-    while text_size < range_from or text_size > range_to:
-        print("Calling openai...")
+    call_count =0
+    while text_size < range_from or text_size > range_to+ai_inaccuracy:
+        call_count+=1
+        print(f"Calling openai #{call_count} for size in [{range_from},{range_to}]...")
         response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=prompt,
             max_tokens=target_len,
             n=1,
             stop=None,
-            temperature=0.2,
+            temperature=0.3,
         )
 
         condensed_text = response.choices[0].text.strip()
@@ -61,6 +67,7 @@ def condense_text(text, range_from, range_to):
         print(condensed_len)
         print("tokens difference:", length_diff)
         text_size=len(condensed_text)
+        time.sleep(10)
     return condensed_text
         
     
