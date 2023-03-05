@@ -2,7 +2,7 @@ from revChatGPT.V1 import Chatbot
 import json
 import logging
 
-logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s', level=logging.DEBUG)
+#logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s', level=logging.DEBUG)
 
 def ask_chatbot(subject):
     # Generate access token through https://chat.openai.com/api/auth/session
@@ -18,5 +18,5 @@ def ask_chatbot(subject):
     ):
         response = data["message"]
     logging.info("Get reply from Chatgpt: %s", response)
-    print (response)
+
     return response

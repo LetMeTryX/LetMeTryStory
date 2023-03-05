@@ -6,16 +6,10 @@ import tiktoken
 import time
 import logging
 from conversational_chatbot import ask_chatbot 
+from story_util import num_tokens_from_string
 
 # Set the logging level to DEBUG
 logging.basicConfig(level=logging.DEBUG)
-
-def num_tokens_from_string(string: str, encoding_name: str) -> int:
-    """Returns the number of tokens in a text string."""
-    encoding = tiktoken.get_encoding(encoding_name)
-    num_tokens = len(encoding.encode(string))
-    return num_tokens
-
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
@@ -43,7 +37,7 @@ def condense_text(text, range_from, range_to):
     print("Original tokens:", original_len)
     print("Target tokens:", target_len)
     
-    prompt = f"请用{(range_to+range_from)/2}字重写下文:\n{text}"
+    prompt = f"请用{int((range_to+range_from)/2)}字重写下文:\n{text}"
     print(prompt)
     
     text_size = len(text)
