@@ -21,7 +21,7 @@ def process_files():
     
     new_section_input = ""
         
-    new_personage_introduction = call_openai_with_template("new-personage-introduction", "new-personage-introduction-prompt-template.txt", story_background, personage_introduction, story_summary, new_section_input)
+    new_personage_introduction = call_openai_with_template("new-personage-introduction", "new-personage-introduction-prompt-template.txt", story_background, personage_introduction, story_summary, new_section_input, 150, 300)
     new_personage_introduction = condense_text(new_personage_introduction, 150, 300)
     save_to_file("old-personage-introduction.txt", new_personage_introduction)
     
