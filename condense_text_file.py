@@ -2,7 +2,6 @@ import openai
 import os
 import sys
 import tokenizers
-import tiktoken
 import time
 import logging
 from conversational_chatbot import ask_chatbot 
